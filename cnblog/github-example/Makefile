@@ -12,12 +12,12 @@ LDFLAGS = `$(LLVMCONFIG) --ldflags` -lpthread -ldl -lz -lncurses -rdynamic
 LIBS = `$(LLVMCONFIG) --libs`
 SYSTEMLIBS = `$(LLVMCONFIG) —-system-libs`
 
-C_syntax.cpp: C_syntax.yacc
+C_syntax.cpp: C_syntax.y
 	bison -d --no-lines -o $@ $^
 
 C_syntax.hpp: C_syntax.cpp
 
-C_lexical.cpp: C_lexical.lex C_syntax.hpp
+C_lexical.cpp: C_lexical.l C_syntax.hpp
 	flex -L -o $@ $^
 
 %.o: %.cpp
