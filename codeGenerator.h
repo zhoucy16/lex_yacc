@@ -182,10 +182,22 @@ public:
 
 public:
   ArrayDecStatementNode(VariableExprNode *type, VariableExprNode *name, long long size): 
-    type(type), name(name), size(size), init(new vector<ExprNode*>()), size(size), isString(false) {}
+    type(type), name(name), init(new vector<ExprNode*>()), size(size), isString(false) {}
   ArrayDecStatementNode(VariableExprNode *type, VariableExprNode *name, vector<ExprNode*> *init): 
-    type(type), name(name), init(init), size(inti->size()), isString(false) {}
-// to be continued
-}
+    type(type), name(name), init(init), size(init->size()), isString(false) {}
+  ArrayDecStatementNode(VariableExprNode *type, VariableExprNode *name, const string &str):
+    type(type), name(name), init(new vector<ExprNode*>()), isString(true) {
+      int len=str.length();
+      for(int i=0; i<len; i++){
+        init->push_back((ExprNode*)(new CharExprNode(str[i])));
+      }
+      //init->push_back((ExprNode*))
+      // !!!!!!!!!!!!!!!!!!!!
+      size = init->size();
+    }
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+
 
 #endif CODEGENERATOR_H

@@ -38,11 +38,17 @@
 
 %type <var> variable type
 %type <vars> function_args
+%type <expr> expr logic_expr
+%type <exprs> invoke_args
 %type <block> global_block local_block
 %type <statement> global_statement local_statement
 %type <statement> function_declaration array_declaration
 %type <var_dec> variable_declaration  // source of problems
 %type <statement> condition loop
+
+%left EQUAL
+
+%nonassoc LOWER_THAN_ELSE
 
 %%
 
@@ -90,7 +96,18 @@ variable_declaration: type variable             { $2->_type = $1->_type; $$ = ne
                     | type variable EQUAL expr  { $2->_type = $1->_type; $$ = new VarDecStatementNode($1, $2, $4); addNewVar($2->name, $2->_type); }
                     ;
 
-array_declaration: type variable LBRACK CINT RBRACK               { $$}
+array_declaration: type variable LBRACK CINT RBRACK                             { $$ = new ArrayDecStatementNode($1, $2, atol($4->c_str())); }
+                 | type variable LBRACK RBRACK EQUAL LBRACE invoke_args RBRACE  { $$ = new ArrayDecStatementNode($1, $2, $7); }
+                 | type variable LBRACK RBRACK EQUAL CSTR                       { $$ = new ArrayDecStatementNode($1, $2, *$6); } /*!!!!*/
+                 ;
+
+/*
+condition: IF LPAREN logic_expr RPAREN block 
+*/
+
+loop: FOR LPAREN expr SEMICOLON logic_expr SEMICOLON expr RPAREN block  { $$ = new For}
+
+                 
 
 
 %%
