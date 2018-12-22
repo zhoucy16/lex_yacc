@@ -90,7 +90,7 @@ variable_declaration: type variable             { $2->_type = $1->_type; $$ = ne
                     | type variable EQUAL expr  { $2->_type = $1->_type; $$ = new VarDecStatementNode($1, $2, $4); addNewVar($2->name, $2->_type); }
                     ;
 
-
+array_declaration: type variable LBRACK CINT RBRACK               { $$}
 
 
 %%
