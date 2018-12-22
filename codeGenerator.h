@@ -72,6 +72,10 @@ public:
   E_TYPE _type;
 };
 
+class StatementNode: public ASTNode {
+
+};
+
 class IntExprNode: public ExprNode {
 public:
   long long val;
@@ -114,5 +118,74 @@ public:
   OperatorExprNode(ExprNode *left, int op, ExprNode *right): left(left), right(right) {}
   virtual void codeGenerator(GeneratorContext&);
 };
+
+class BlockExprNode: public ExprNode {
+public:
+  vector<StatementNode*> *statements;
+
+public:
+  BlockExprNode(): statements(new vector<StatementNode*>()) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class ExprStatementNode: public StatementNode {
+public:
+  ExprNode *expression;
+
+public:
+  ExprStatementNode(ExprNode *expression): expression(expression) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class VarDecStatementNode: public StatementNode {
+public:
+  VariableExprNode *type;
+  VariableExprNode *name;
+  ExprNode *expr;
+
+public:
+  VarDecStatementNode(VariableExprNode *type, VariableExprNode *name, ExprNode *expr = NULL):
+  type(type), name(name), expr(expr) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class FuncDecStatementNode: public StatementNode {
+public:
+  VariableExprNode *type;
+  VariableExprNode *name;
+  vector<VarDecStatementNode*> *args;
+  BlockExprNode *block;
+
+public:
+  FuncDecStatementNode(VariableExprNode *type, VariableExprNode *name, 
+    vector<VarDecStatementNode*> *args, BlockExprNode *block): 
+    type(type), name(name), args(args), block(block) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class ReturnStatementNode: public StatementNode {
+public:
+  ExprNode *expr;
+
+public:
+  ReturnStatementNode(ExprNode *expr): expr(expr) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class ArrayDecStatementNode: public StatementNode {
+public:
+  VariableExprNode *type;
+  VariableExprNode *name;
+  vector<ExprNode*> *init;
+  long long size;
+  bool isString;
+
+public:
+  ArrayDecStatementNode(VariableExprNode *type, VariableExprNode *name, long long size): 
+    type(type), name(name), size(size), init(new vector<ExprNode*>()), size(size), isString(false) {}
+  ArrayDecStatementNode(VariableExprNode *type, VariableExprNode *name, vector<ExprNode*> *init): 
+    type(type), name(name), init(init), size(inti->size()), isString(false) {}
+// to be continued
+}
 
 #endif CODEGENERATOR_H

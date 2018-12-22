@@ -38,6 +38,10 @@
 
 "["															return SYMBOL(LBRACK);
 "]"															return SYMBOL(RBRACK);
+"("															return SYMBOL(LPAREN);
+")"															return SYMBOL(RPAREN);
+"{"															return SYMBOL(LBRACE);
+"}"															return SYMBOL(RBRACE);
 
 "="															return SYMBOL(EQUAL);
 
