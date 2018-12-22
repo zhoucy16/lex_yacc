@@ -198,6 +198,38 @@ public:
   virtual void codeGenerator(GeneratorContext&);
 };
 
+class ForStatementNode: public StatementNode {
+public:
+  ExprNode *initExpr;
+  ExprNode *condExpr;
+  ExprNode *loopExpr;
+  BlockExprNode *block;
+public:
+  ForStatementNode(ExprNode *initExpr, ExprNode *condExpr, ExprNode *loopExpr, BlockExprNode *block):
+    initExpr(initExpr), condExpr(condExpr), loopExpr(loopExpr), block(block) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class WhileStatementNode: public StatementNode{
+public:
+  ExprNode *whileExpr;
+  BlockExprNode *block;
+public:
+  WhileStatementNode(ExprNode *whileExpr, BlockExprNode *block):
+    whileExpr(whileExpr),block(block){}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class AssignExprNode: public ExprNode{
+public:
+  VariableExprNode *left;
+  ExprNode *right;
+public:
+  AssignExprNode(VariableExprNode *left, ExprNode *right):
+    left(left),right(right) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
 
 
 #endif CODEGENERATOR_H

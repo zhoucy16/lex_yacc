@@ -13,6 +13,8 @@
 
   int lineNum = 1;
   map<string, E_TYPE> varTable;
+
+  void setVarType(VariableExprNode *);
 %}
 
 %union {
@@ -45,6 +47,7 @@
 %type <statement> function_declaration array_declaration
 %type <var_dec> variable_declaration  // source of problems
 %type <statement> condition loop
+%type <token> compare
 
 %left EQUAL
 
@@ -54,8 +57,8 @@
 
 program: global_block { root = $1; };
 
-global_block: global_statement              { $$ = new BlockExprNode(); $$->statements->push_back($1); }
-            | global_block global_statement { $$->statements->push_back($2); }
+global_block: global_statement              { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
+            | global_block global_statement { $$->statements->push_back($<statement>2); }
             ;
 
 global_statement: function_declaration      { $$ = $1; }
@@ -74,13 +77,13 @@ variable: VAR   { $$ = new VariableExprNode(*$1); delete $1; };
 
 function_args:                                          { $$ = new vector<VarDecStatementNode*>(); }                // to edit
              | variable_declaration                     { $$ = new vector<VarDecStatementNode*>(); $$->push_back($1); }
-             | function_args COMMA variable_declaration { $1->push_back($3); $$ = $1; }
+             | function_args COMMA variable_declaration { $1->push_back($<var_dec>3); $$ = $1; }
              ; 
 
 block: LBRACE local_block RBRACE  { $$ = $2; };
 
-local_block: local_statement              { $$ = new BlockExprNode(); $$->statements->push_back($1); }
-           | local_block local_statement  { $$->statements->push_back($2); }
+local_block: local_statement              { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
+           | local_block local_statement  { $$->statements->push_back($<statement>2); }
            ;
 
 local_statement: variable_declaration SEMICOLON { $$ = $1; }
@@ -102,11 +105,24 @@ array_declaration: type variable LBRACK CINT RBRACK                             
                  ;
 
 /*
-condition: IF LPAREN logic_expr RPAREN block 
+condition: IF LPAREN logic_expr RPAREN block ;
 */
 
-loop: FOR LPAREN expr SEMICOLON logic_expr SEMICOLON expr RPAREN block  { $$ = new For}
+loop: FOR LPAREN expr SEMICOLON logic_expr SEMICOLON expr RPAREN block  { $$ = new ForStatementNode($3, $5, $7, $9); }
+    | WHILE LPAREN logic_expr RPAREN block                              { $$ = new WhileStatementNode($3, $5); }
+    ;
 
+expr: variable            { $<var>$ = $1; }
+    | const               { $$ = $1; }
+    | expr ADD expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr SUB expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr MUL expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr DIV expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | variable SADD expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SSUB expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SMUL expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SDIV expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | expr compare 
                  
 
 
@@ -127,4 +143,15 @@ void addNewVar(string name, E_TYPE type) {
 
 E_TYPE checkExprType(ExprNode *left, ExprNode *right) {
   // to edit
+}
+
+void setVarType(VariableExprNode *var){
+  map<string, E_TYPE>::iterator it;
+  it = varTable.find(var->name);
+  if(it == varTable.end()){
+    var->_type = E_UNKNOWN;    
+  }
+  else{
+    var->_type = (*it).second;
+  }
 }
