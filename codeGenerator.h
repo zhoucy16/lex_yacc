@@ -54,10 +54,10 @@ public:
   set<string>& globals();
   void declareGlobal(string name);
   BaseGeneratorBlock *currentBlock();
-  void pushBlock();
+  void pushBlock(bool copyLocals = true, bool = false);
   void popBlock();
-  void indent();
-  void nextLine();
+  void indent(bool buf);
+  void nextLine(bool buf);
 };
 
 class ASTNode {
