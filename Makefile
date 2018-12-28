@@ -1,3 +1,5 @@
+all: compiler
+
 OBJS = AST_parser.o lexical.o codeGenerator.o main.o
 
 AST_parser.cpp: AST_parser.y

@@ -8,9 +8,9 @@ using namespace std;
 
 extern FILE* yyin;
 extern BlockExprNode* root;
-extern int yyparse()
+extern int yyparse();
 
-int main(int argc,char **argv) {
+int main(int argc, char **argv) {
     char *filename;
     if (argc == 2)
         filename = argv[1];
@@ -23,16 +23,16 @@ int main(int argc,char **argv) {
     if(yyparse()){
         cout<<"error"<<endl;
     }
-    GeneratorContext Pcontext;
+    GeneratorContext context;
     cout << "Generating Python code" << endl;
     cout << "----------------------" << endl;
-    context.CodeGen(*root);
+    context.codeGenerator(*root);
     cout << "----------------------" << endl;
     cout << "Finished" << endl;
-    char *outputFilename = "output.py" 
+    char *outputFilename = "output.py";
     ofstream outfile;
     outfile.open(outputFilename, ios::out);
-    context.OutputCode(outfile);
+    context.outputCode(outfile);
     outfile.close();
 
     fclose(yyin);
