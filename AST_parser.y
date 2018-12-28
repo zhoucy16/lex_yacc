@@ -52,7 +52,7 @@
 %type <statement> function_declaration array_declaration
 %type <var_dec> variable_declaration  // source of problems
 %type <statement> condition loop
-%type <token> compare
+%type <symbol> compare
 
 %left EQUAL
 %left OR
@@ -156,14 +156,14 @@ logic_expr: logic_expr OR logic_expr  { $$ = new OperatorExprNode($1, $2, $3); }
           ;
 
 block: LBRACE local_block RBRACE   { $$ = $2; }
-     | local_statement             { $$ new BlockExprNode(); $$->statements->push_back($<statement>1); }
+     | local_statement             { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
      ;
 
 const: CINT                         { $$ = new IntExprNode(atoi($1->c_str())); delete $1; }
      | CDOUBLE                      { $$ = new DoubleExprNode(atoi($1->c_str())); delete $1; }
      | CCHAR                        { $$ = new CharExprNode($1->front()); delete $1; }
-     | SUB CINT                     { $$ = new IntExprNode(-atoi($2->c_str())); delete $1; }
-     | SUB CDOUBLE                  { $$ = new IntExprNode(-atoi($2->c_str())); delete $1; }
+     | SUB CINT                     { $$ = new IntExprNode(-atoi($2->c_str())); delete $2; }
+     | SUB CDOUBLE                  { $$ = new IntExprNode(-atoi($2->c_str())); delete $2; }
      ;
 
 compare: EQ         { $$ = $1; }
@@ -184,7 +184,7 @@ void addNewVar(string name, E_TYPE type) {
   } else if (type == E_FUNC) {
     varTable[name] = type;
   } else {
-    cout << "line " << lineNumber << ": redefinition of variable " << name << endl;
+    cout << "line " << lineNum << ": redefinition of variable " << name << endl;
     varTable[name] = type;
   }
 }

@@ -178,6 +178,8 @@
   map<string, E_TYPE> varTable;
 
   void setVarType(VariableExprNode *);
+  void addNewVar(string name, E_TYPE type);
+  E_TYPE checkExprType(ExprNode *left, ExprNode *right);
 
 
 /* Enabling traces.  */
@@ -200,7 +202,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "AST_parser.y"
+#line 22 "AST_parser.y"
 {
   int symbol;
   string *string;
@@ -213,7 +215,7 @@ typedef union YYSTYPE
   VarDecStatementNode *var_dec;
 }
 /* Line 193 of yacc.c.  */
-#line 217 "AST_parser.cpp"
+#line 219 "AST_parser.cpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -226,7 +228,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 230 "AST_parser.cpp"
+#line 232 "AST_parser.cpp"
 
 #ifdef short
 # undef short
@@ -546,14 +548,14 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    68,    69,    72,    73,    76,    78,    79,
-      80,    81,    84,    86,    87,    88,    91,    93,    94,    97,
-      98,    99,   100,   101,   102,   103,   106,   107,   110,   111,
-     112,   115,   116,   119,   120,   123,   124,   125,   126,   127,
-     128,   129,   130,   131,   132,   133,   134,   135,   136,   137,
-     138,   139,   140,   141,   142,   143,   146,   147,   148,   151,
-     152,   153,   156,   157,   160,   161,   162,   163,   164,   167,
-     168,   169,   170,   171,   172
+       0,    68,    68,    70,    71,    74,    75,    78,    80,    81,
+      82,    83,    86,    88,    89,    90,    93,    95,    96,    99,
+     100,   101,   102,   103,   104,   105,   108,   109,   112,   113,
+     114,   117,   118,   121,   122,   125,   126,   127,   128,   129,
+     130,   131,   132,   133,   134,   135,   136,   137,   138,   139,
+     140,   141,   142,   143,   144,   145,   148,   149,   150,   153,
+     154,   155,   158,   159,   162,   163,   164,   165,   166,   169,
+     170,   171,   172,   173,   174
 };
 #endif
 
@@ -1588,373 +1590,373 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 66 "AST_parser.y"
+#line 68 "AST_parser.y"
     { root = (yyvsp[(1) - (1)].block); ;}
     break;
 
   case 3:
-#line 68 "AST_parser.y"
+#line 70 "AST_parser.y"
     { (yyval.block) = new BlockExprNode(); (yyval.block)->statements->push_back((yyvsp[(1) - (1)].statement)); ;}
     break;
 
   case 4:
-#line 69 "AST_parser.y"
+#line 71 "AST_parser.y"
     { (yyval.block)->statements->push_back((yyvsp[(2) - (2)].statement)); ;}
     break;
 
   case 5:
-#line 72 "AST_parser.y"
+#line 74 "AST_parser.y"
     { (yyval.statement) = (yyvsp[(1) - (1)].statement); ;}
     break;
 
   case 6:
-#line 73 "AST_parser.y"
+#line 75 "AST_parser.y"
     { (yyval.statement) = new ExprStatementNode((yyvsp[(1) - (2)].expr)); ;}
     break;
 
   case 7:
-#line 76 "AST_parser.y"
+#line 78 "AST_parser.y"
     { (yyval.statement) = new FuncDecStatementNode((yyvsp[(1) - (6)].var), (yyvsp[(2) - (6)].var), (yyvsp[(4) - (6)].vars), (yyvsp[(6) - (6)].block)); ;}
     break;
 
   case 8:
-#line 78 "AST_parser.y"
+#line 80 "AST_parser.y"
     { (yyval.var) = new VariableExprNode(*(yyvsp[(1) - (1)].string), E_INT); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 9:
-#line 79 "AST_parser.y"
+#line 81 "AST_parser.y"
     { (yyval.var) = new VariableExprNode(*(yyvsp[(1) - (1)].string), E_DOUBLE); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 10:
-#line 80 "AST_parser.y"
+#line 82 "AST_parser.y"
     { (yyval.var) = new VariableExprNode(*(yyvsp[(1) - (1)].string), E_CHAR); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 11:
-#line 81 "AST_parser.y"
+#line 83 "AST_parser.y"
     { (yyval.var) = new VariableExprNode(*(yyvsp[(1) - (1)].string), E_VOID); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 12:
-#line 84 "AST_parser.y"
+#line 86 "AST_parser.y"
     { (yyval.var) = new VariableExprNode(*(yyvsp[(1) - (1)].string)); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 13:
-#line 86 "AST_parser.y"
+#line 88 "AST_parser.y"
     { (yyval.vars) = new vector<VarDecStatementNode*>(); ;}
     break;
 
   case 14:
-#line 87 "AST_parser.y"
+#line 89 "AST_parser.y"
     { (yyval.vars) = new vector<VarDecStatementNode*>(); (yyval.vars)->push_back((yyvsp[(1) - (1)].var_dec)); ;}
     break;
 
   case 15:
-#line 88 "AST_parser.y"
+#line 90 "AST_parser.y"
     { (yyvsp[(1) - (3)].vars)->push_back((yyvsp[(3) - (3)].var_dec)); (yyval.vars) = (yyvsp[(1) - (3)].vars); ;}
     break;
 
   case 16:
-#line 91 "AST_parser.y"
+#line 93 "AST_parser.y"
     { (yyval.block) = (yyvsp[(2) - (3)].block); ;}
     break;
 
   case 17:
-#line 93 "AST_parser.y"
+#line 95 "AST_parser.y"
     { (yyval.block) = new BlockExprNode(); (yyval.block)->statements->push_back((yyvsp[(1) - (1)].statement)); ;}
     break;
 
   case 18:
-#line 94 "AST_parser.y"
+#line 96 "AST_parser.y"
     { (yyval.block)->statements->push_back((yyvsp[(2) - (2)].statement)); ;}
     break;
 
   case 19:
-#line 97 "AST_parser.y"
+#line 99 "AST_parser.y"
     { (yyval.statement) = (yyvsp[(1) - (2)].var_dec); ;}
     break;
 
   case 20:
-#line 98 "AST_parser.y"
+#line 100 "AST_parser.y"
     { (yyval.statement) = (yyvsp[(1) - (2)].statement); ;}
     break;
 
   case 21:
-#line 99 "AST_parser.y"
+#line 101 "AST_parser.y"
     { (yyval.statement) = (yyvsp[(1) - (1)].statement); ;}
     break;
 
   case 22:
-#line 100 "AST_parser.y"
+#line 102 "AST_parser.y"
     { (yyval.statement) = (yyvsp[(1) - (1)].statement); ;}
     break;
 
   case 23:
-#line 101 "AST_parser.y"
+#line 103 "AST_parser.y"
     { (yyval.statement) = new ExprStatementNode((yyvsp[(1) - (2)].expr)); ;}
     break;
 
   case 24:
-#line 102 "AST_parser.y"
+#line 104 "AST_parser.y"
     { (yyval.statement) = new ReturnStatementNode((yyvsp[(2) - (3)].expr)); ;}
     break;
 
   case 25:
-#line 103 "AST_parser.y"
+#line 105 "AST_parser.y"
     { /* NULL */ ;}
     break;
 
   case 26:
-#line 106 "AST_parser.y"
+#line 108 "AST_parser.y"
     { (yyvsp[(2) - (2)].var)->_type = (yyvsp[(1) - (2)].var)->_type; (yyval.var_dec) = new VarDecStatementNode((yyvsp[(1) - (2)].var), (yyvsp[(2) - (2)].var)); addNewVar((yyvsp[(2) - (2)].var)->name, (yyvsp[(2) - (2)].var)->_type); ;}
     break;
 
   case 27:
-#line 107 "AST_parser.y"
+#line 109 "AST_parser.y"
     { (yyvsp[(2) - (4)].var)->_type = (yyvsp[(1) - (4)].var)->_type; (yyval.var_dec) = new VarDecStatementNode((yyvsp[(1) - (4)].var), (yyvsp[(2) - (4)].var), (yyvsp[(4) - (4)].expr)); addNewVar((yyvsp[(2) - (4)].var)->name, (yyvsp[(2) - (4)].var)->_type); ;}
     break;
 
   case 28:
-#line 110 "AST_parser.y"
+#line 112 "AST_parser.y"
     { (yyval.statement) = new ArrayDecStatementNode((yyvsp[(1) - (5)].var), (yyvsp[(2) - (5)].var), atol((yyvsp[(4) - (5)].string)->c_str())); ;}
     break;
 
   case 29:
-#line 111 "AST_parser.y"
+#line 113 "AST_parser.y"
     { (yyval.statement) = new ArrayDecStatementNode((yyvsp[(1) - (8)].var), (yyvsp[(2) - (8)].var), (yyvsp[(7) - (8)].exprs)); ;}
     break;
 
   case 30:
-#line 112 "AST_parser.y"
+#line 114 "AST_parser.y"
     { (yyval.statement) = new ArrayDecStatementNode((yyvsp[(1) - (6)].var), (yyvsp[(2) - (6)].var), *(yyvsp[(6) - (6)].string)); ;}
     break;
 
   case 31:
-#line 115 "AST_parser.y"
+#line 117 "AST_parser.y"
     { (yyval.statement) = new IfStatementNode((yyvsp[(3) - (5)].expr), (yyvsp[(5) - (5)].block)); ;}
     break;
 
   case 32:
-#line 116 "AST_parser.y"
+#line 118 "AST_parser.y"
     { (yyval.statement) = new IfStatementNode((yyvsp[(3) - (7)].expr), (yyvsp[(5) - (7)].block), (yyvsp[(7) - (7)].block)); ;}
     break;
 
   case 33:
-#line 119 "AST_parser.y"
+#line 121 "AST_parser.y"
     { (yyval.statement) = new ForStatementNode((yyvsp[(3) - (9)].expr), (yyvsp[(5) - (9)].expr), (yyvsp[(7) - (9)].expr), (yyvsp[(9) - (9)].block)); ;}
     break;
 
   case 34:
-#line 120 "AST_parser.y"
+#line 122 "AST_parser.y"
     { (yyval.statement) = new WhileStatementNode((yyvsp[(3) - (5)].expr), (yyvsp[(5) - (5)].block)); ;}
     break;
 
   case 35:
-#line 123 "AST_parser.y"
+#line 125 "AST_parser.y"
     { (yyval.var) = (yyvsp[(1) - (1)].var); ;}
     break;
 
   case 36:
-#line 124 "AST_parser.y"
+#line 126 "AST_parser.y"
     { (yyval.expr) = (yyvsp[(1) - (1)].expr); ;}
     break;
 
   case 37:
-#line 125 "AST_parser.y"
-    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
-    break;
-
-  case 38:
-#line 126 "AST_parser.y"
-    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
-    break;
-
-  case 39:
 #line 127 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 40:
+  case 38:
 #line 128 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 41:
+  case 39:
 #line 129 "AST_parser.y"
-    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 42:
+  case 40:
 #line 130 "AST_parser.y"
-    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
+    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].expr), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 43:
+  case 41:
 #line 131 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 44:
+  case 42:
 #line 132 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
-  case 45:
+  case 43:
 #line 133 "AST_parser.y"
-    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].token), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = E_INT; ;}
+    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
+    break;
+
+  case 44:
+#line 134 "AST_parser.y"
+    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].var), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyval.expr)); setVarType((yyvsp[(1) - (3)].var)); (yyval.expr)->_type = checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); ;}
+    break;
+
+  case 45:
+#line 135 "AST_parser.y"
+    { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = E_INT; ;}
     break;
 
   case 46:
-#line 134 "AST_parser.y"
+#line 136 "AST_parser.y"
     { (yyval.expr) = new AssignExprNode((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); setVarType((yyvsp[(1) - (3)].var)); checkExprType((yyvsp[(1) - (3)].var), (yyvsp[(3) - (3)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (3)].var)->_type; ;}
     break;
 
   case 47:
-#line 135 "AST_parser.y"
+#line 137 "AST_parser.y"
     { (yyval.expr) = new FuncExprNode((yyvsp[(1) - (4)].var), (yyvsp[(3) - (4)].exprs)); addNewVar((yyvsp[(1) - (4)].var)->name, E_FUNC); setVarType((yyvsp[(1) - (4)].var)); (yyval.expr)->_type =(yyvsp[(1) - (4)].var)->_type; ;}
     break;
 
   case 48:
-#line 136 "AST_parser.y"
+#line 138 "AST_parser.y"
     { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (4)].var), (yyvsp[(3) - (4)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (4)].var)->_type; ;}
     break;
 
   case 49:
-#line 137 "AST_parser.y"
+#line 139 "AST_parser.y"
     { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
     break;
 
   case 50:
-#line 138 "AST_parser.y"
-    { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
-    break;
-
-  case 51:
-#line 139 "AST_parser.y"
-    { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
-    break;
-
-  case 52:
 #line 140 "AST_parser.y"
     { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
     break;
 
-  case 53:
+  case 51:
 #line 141 "AST_parser.y"
     { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
     break;
 
-  case 54:
+  case 52:
 #line 142 "AST_parser.y"
+    { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
+    break;
+
+  case 53:
+#line 143 "AST_parser.y"
+    { (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr)); (yyval.expr) = new OperatorExprNode((yyval.expr), (yyvsp[(5) - (6)].symbol), (yyvsp[(6) - (6)].expr)); (yyval.expr) = new IndexExprNode((yyvsp[(1) - (6)].var), (yyvsp[(3) - (6)].expr), (yyval.expr)); checkExprType((yyvsp[(1) - (6)].var), (yyvsp[(6) - (6)].expr)); (yyval.expr)->_type = (yyvsp[(1) - (6)].var)->_type; ;}
+    break;
+
+  case 54:
+#line 144 "AST_parser.y"
     { (yyval.expr) = (yyvsp[(2) - (3)].expr); ;}
     break;
 
   case 55:
-#line 143 "AST_parser.y"
+#line 145 "AST_parser.y"
     { (yyval.expr) = new CastExprNode((yyvsp[(2) - (4)].var), (yyvsp[(4) - (4)].expr)); (yyval.expr)->_type = (yyvsp[(2) - (4)].var)->_type; ;}
     break;
 
   case 56:
-#line 146 "AST_parser.y"
+#line 148 "AST_parser.y"
     { (yyval.exprs) = new vector<ExprNode*>(); ;}
     break;
 
   case 57:
-#line 147 "AST_parser.y"
+#line 149 "AST_parser.y"
     { (yyval.exprs) = new vector<ExprNode*>(); (yyval.exprs)->push_back((yyvsp[(1) - (1)].expr)); ;}
     break;
 
   case 58:
-#line 148 "AST_parser.y"
+#line 150 "AST_parser.y"
     { (yyvsp[(1) - (3)].exprs)->push_back((yyvsp[(3) - (3)].expr)); (yyval.exprs) = (yyvsp[(1) - (3)].exprs); ;}
     break;
 
   case 59:
-#line 151 "AST_parser.y"
+#line 153 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 60:
-#line 152 "AST_parser.y"
+#line 154 "AST_parser.y"
     { (yyval.expr) = new OperatorExprNode((yyvsp[(1) - (3)].expr), (yyvsp[(2) - (3)].symbol), (yyvsp[(3) - (3)].expr)); ;}
     break;
 
   case 61:
-#line 153 "AST_parser.y"
+#line 155 "AST_parser.y"
     { (yyval.expr) = (yyvsp[(1) - (1)].expr);;}
     break;
 
   case 62:
-#line 156 "AST_parser.y"
+#line 158 "AST_parser.y"
     { (yyval.block) = (yyvsp[(2) - (3)].block); ;}
     break;
 
   case 63:
-#line 157 "AST_parser.y"
-    { (yyval.block) new BlockExprNode(); (yyval.block)->statements->push_back((yyvsp[(1) - (1)].statement)); ;}
+#line 159 "AST_parser.y"
+    { (yyval.block) = new BlockExprNode(); (yyval.block)->statements->push_back((yyvsp[(1) - (1)].statement)); ;}
     break;
 
   case 64:
-#line 160 "AST_parser.y"
+#line 162 "AST_parser.y"
     { (yyval.expr) = new IntExprNode(atoi((yyvsp[(1) - (1)].string)->c_str())); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 65:
-#line 161 "AST_parser.y"
+#line 163 "AST_parser.y"
     { (yyval.expr) = new DoubleExprNode(atoi((yyvsp[(1) - (1)].string)->c_str())); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 66:
-#line 162 "AST_parser.y"
+#line 164 "AST_parser.y"
     { (yyval.expr) = new CharExprNode((yyvsp[(1) - (1)].string)->front()); delete (yyvsp[(1) - (1)].string); ;}
     break;
 
   case 67:
-#line 163 "AST_parser.y"
-    { (yyval.expr) = new IntExprNode(-atoi((yyvsp[(2) - (2)].string)->c_str())); delete (yyvsp[(1) - (2)].symbol); ;}
+#line 165 "AST_parser.y"
+    { (yyval.expr) = new IntExprNode(-atoi((yyvsp[(2) - (2)].string)->c_str())); delete (yyvsp[(2) - (2)].string); ;}
     break;
 
   case 68:
-#line 164 "AST_parser.y"
-    { (yyval.expr) = new IntExprNode(-atoi((yyvsp[(2) - (2)].string)->c_str())); delete (yyvsp[(1) - (2)].symbol); ;}
+#line 166 "AST_parser.y"
+    { (yyval.expr) = new IntExprNode(-atoi((yyvsp[(2) - (2)].string)->c_str())); delete (yyvsp[(2) - (2)].string); ;}
     break;
 
   case 69:
-#line 167 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 169 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
   case 70:
-#line 168 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 170 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
   case 71:
-#line 169 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 171 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
   case 72:
-#line 170 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 172 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
   case 73:
-#line 171 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 173 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
   case 74:
-#line 172 "AST_parser.y"
-    { (yyval.token) = (yyvsp[(1) - (1)].symbol); ;}
+#line 174 "AST_parser.y"
+    { (yyval.symbol) = (yyvsp[(1) - (1)].symbol); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1958 "AST_parser.cpp"
+#line 1960 "AST_parser.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2168,7 +2170,7 @@ yyreturn:
 }
 
 
-#line 175 "AST_parser.y"
+#line 177 "AST_parser.y"
 
 
 void addNewVar(string name, E_TYPE type) {
@@ -2179,7 +2181,7 @@ void addNewVar(string name, E_TYPE type) {
   } else if (type == E_FUNC) {
     varTable[name] = type;
   } else {
-    cout << "line " << lineNumber << ": redefinition of variable " << name << endl;
+    cout << "line " << lineNum << ": redefinition of variable " << name << endl;
     varTable[name] = type;
   }
 }

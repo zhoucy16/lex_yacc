@@ -215,6 +215,9 @@ void OperatorExprNode::codeGenerator(GeneratorContext &context) {
             res = "/";
             break;
     }
+    cout << "test" << endl;
+    cout << op << endl;
+    cout << res << endl;
     context.code_buf << "(";
     left->codeGenerator(context);
     context.code_buf << " " << res << " ";
@@ -319,15 +322,16 @@ void FuncDecStatementNode::codeGenerator(GeneratorContext &context) {
     context.code << "def ";
     name->codeGenerator(context);
     context.code << "(";
-    vector<ExprNode*>::iterator it = args->begin();
-    if(it != args->end()){
-        (*it)->codeGenerator(context);
-        for(it = it + 1; it != args->end(); it++) {
+    int len = args->size();
+    if(len > 0){
+        int i = 0;
+        (*args)[i]->codeGenerator(context);
+        for(i+=1; i < len; i++) {
             context.code_buf << ",";
-            (*it)->codeGenerator(context);
+            (*args)[i]->codeGenerator(context);
         }
     }
-    context.code_buf << "):";
+    context.code << "):";
     context.nextLine(false);
     context.funcDeclaring = false;
     block->codeGenerator(context);

@@ -59,6 +59,19 @@
 "<"                            								return SYMBOL(LW);
 "<="                            							return SYMBOL(LE);
 
+"&&"                            return SYMBOL(AND);
+"||"                            return SYMBOL(OR);
+
+
+"+"                             return SYMBOL(ADD);
+"-"                             return SYMBOL(SUB);
+"*"                             return SYMBOL(MUL);
+"/"                             return SYMBOL(DIV);
+
+"+="                            return SYMBOL(SADD);
+"-="                            return SYMBOL(SSUB);
+"*="                            return SYMBOL(SMUL);
+"/="                            return SYMBOL(SDIV);
 
 ","															return SYMBOL(COMMA);
 ":"															return SYMBOL(COLON);

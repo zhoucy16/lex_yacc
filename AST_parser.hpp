@@ -134,7 +134,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 20 "AST_parser.y"
+#line 22 "AST_parser.y"
 {
   int symbol;
   string *string;

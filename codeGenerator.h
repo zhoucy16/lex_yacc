@@ -125,7 +125,7 @@ public:
   ExprNode *left, *right;
 
 public:
-  OperatorExprNode(ExprNode *left, int op, ExprNode *right): left(left), right(right) {}
+  OperatorExprNode(ExprNode *left, int op, ExprNode *right): left(left), right(right), op(op) {}
   virtual void codeGenerator(GeneratorContext&);
 };
 
@@ -140,10 +140,10 @@ public:
 
 class ExprStatementNode: public StatementNode {
 public:
-  ExprNode *expression;
+  ExprNode *expr;
 
 public:
-  ExprStatementNode(ExprNode *expression): expression(expression) {}
+  ExprStatementNode(ExprNode *expr): expr(expr) {}
   virtual void codeGenerator(GeneratorContext&);
 };
 
