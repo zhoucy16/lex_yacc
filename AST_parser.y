@@ -34,9 +34,13 @@
 %token <string> VAR
 
 %token <symbol> LBRACK RBRACK LPAREN RPAREN LBRACE RBRACE
-%token <symbol> EQUAL
+%token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
 %token <symbol> SEMICOLON
 %token <symbol> RETURN
+%token <symbol> ELIF IF ELSE FOR WHILE
+%token <symbol> COMMA COLON SEMICOLON
+%token <symbol> EQ NE GR GE LW LE AND OR
+
 
 %type <var> variable type
 %type <vars> function_args
@@ -50,8 +54,13 @@
 %type <token> compare
 
 %left EQUAL
+%left OR
+%left AND 
+%left ADD SUB SADD SSUB
+%left MUL DIV SMUL SDIV
 
 %nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE
 
 %%
 
@@ -65,7 +74,7 @@ global_statement: function_declaration      { $$ = $1; }
                 | expr SEMICOLON            { $$ = new ExprStatementNode($1); }
                 ;
 
-function_declaration: type variable LPAREN function_args RPAREN block { $$ = new FuncDecStatementNode($1, $2, $4, $6); };
+function_declaration: type variable LPAREN function_args RPAREN block { $$ = new FuncDecStatementNode($1, $2, $4, $6); }; /*为啥这里不记录*/
 
 type: INT       { $$ = new VariableExprNode(*$1, E_INT); delete $1; }
     | DOUBLE    { $$ = new VariableExprNode(*$1, E_DOUBLE); delete $1; }
@@ -104,27 +113,65 @@ array_declaration: type variable LBRACK CINT RBRACK                             
                  | type variable LBRACK RBRACK EQUAL CSTR                       { $$ = new ArrayDecStatementNode($1, $2, *$6); } /*!!!!*/
                  ;
 
-/*
-condition: IF LPAREN logic_expr RPAREN block ;
-*/
+condition: IF LPAREN logic_expr RPAREN block %prec LOWER_THAN_ELSE    { $$ = new IfStatementNode($3, $5); }
+         | IF LPAREN logic_expr RPAREN block ELSE block               { $$ = new IfStatementNode($3, $5, $7); }
+         ;
 
 loop: FOR LPAREN expr SEMICOLON logic_expr SEMICOLON expr RPAREN block  { $$ = new ForStatementNode($3, $5, $7, $9); }
     | WHILE LPAREN logic_expr RPAREN block                              { $$ = new WhileStatementNode($3, $5); }
     ;
 
-expr: variable            { $<var>$ = $1; }
-    | const               { $$ = $1; }
-    | expr ADD expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
-    | expr SUB expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
-    | expr MUL expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
-    | expr DIV expr       { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
-    | variable SADD expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
-    | variable SSUB expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
-    | variable SMUL expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
-    | variable SDIV expr  { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
-    | expr compare 
-                 
+expr: variable                                  { $<var>$ = $1; }
+    | const                                     { $$ = $1; }
+    | expr ADD expr                             { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr SUB expr                             { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr MUL expr                             { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | expr DIV expr                             { $$ = new OperatorExprNode($1, $2, $3); $$->_type = checkExprType($1, $3); }
+    | variable SADD expr                        { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SSUB expr                        { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SMUL expr                        { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | variable SDIV expr                        { $$ = new OperatorExprNode($1, $2, $3); $$ = new AssignExprNode($1, $$); setVarType($1); $$->_type = checkExprType($1, $3); }
+    | expr compare expr                         { $$ = new OperatorExprNode($1, $2, $3); $$->_type = E_INT; }
+    | variable EQUAL expr                       { $$ = new AssignExprNode($1, $3); setVarType($1); checkExprType($1, $3); $$->_type = $1->_type; }
+    | variable LPAREN invoke_args RPAREN        { $$ = new FuncExprNode($1, $3); addNewVar($1->name, E_FUNC); setVarType($1); $$->_type =$1->_type; }
+    | variable LBRACK expr RBRACK               { $$ = new IndexExprNode($1, $3); $$->_type = $1->_type; }
+    | variable LBRACK expr RBRACK EQUAL expr    { $$ = new IndexExprNode($1, $3); checkExprType($1, $6); $$->_type = $1->_type; }
+    | variable LBRACK expr RBRACK SADD expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
+    | variable LBRACK expr RBRACK SSUB expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
+    | variable LBRACK expr RBRACK SMUL expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
+    | variable LBRACK expr RBRACK SDIV expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
+    | LPAREN expr RPAREN                        { $$ = $2; }
+    | LPAREN type RPAREN expr                   { $$ = new CastExprNode($2, $4); $$->_type = $2->_type; }
+    ;
 
+invoke_args: /* NULL */               { $$ = new vector<ExprNode*>(); }
+           | expr                     { $$ = new vector<ExprNode*>(); $$->push_back($1); }
+           | invoke_args COMMA expr   { $1->push_back($3); $$ = $1; }
+           ;
+
+logic_expr: logic_expr OR logic_expr  { $$ = new OperatorExprNode($1, $2, $3); }
+          | logic_expr AND logic_expr { $$ = new OperatorExprNode($1, $2, $3); }
+          | expr                      { $$ = $1;}
+          ;
+
+block: LBRACE local_block RBRACE   { $$ = $2; }
+     | local_statement             { $$ new BlockExprNode(); $$->statements->push_back($<statement>1); }
+     ;
+
+const: CINT                         { $$ = new IntExprNode(atoi($1->c_str())); delete $1; }
+     | CDOUBLE                      { $$ = new DoubleExprNode(atoi($1->c_str())); delete $1; }
+     | CCHAR                        { $$ = new CharExprNode($1->front()); delete $1; }
+     | SUB CINT                     { $$ = new IntExprNode(-atoi($2->c_str())); delete $1; }
+     | SUB CDOUBLE                  { $$ = new IntExprNode(-atoi($2->c_str())); delete $1; }
+     ;
+
+compare: EQ         { $$ = $1; }
+       | NE         { $$ = $1; }
+       | GR         { $$ = $1; }
+       | GE         { $$ = $1; }
+       | LW         { $$ = $1; }
+       | LE         { $$ = $1; }
+       ;
 
 %%
 

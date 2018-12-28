@@ -109,6 +109,16 @@ public:
   virtual void codeGenerator(GeneratorContext&);
 };
 
+class DoubleExprNode: public ExprNode {
+  double val;
+public:
+  DoubleExprNode(double val): val(val){
+    _type = E_DOUBLE;
+  }
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+
 class OperatorExprNode: public ExprNode {
 public:
   int op;
@@ -227,6 +237,54 @@ public:
 public:
   AssignExprNode(VariableExprNode *left, ExprNode *right):
     left(left),right(right) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class FuncExprNode: public ExprNode {
+public:
+  VariableExprNode *funcName;
+  vector<ExprNode*> *args;
+public:
+  FuncExprNode(VariableExprNode *funcName):
+    funcName(funcName), args(new vector<ExprNode*>()) {}
+  FuncExprNode(VariableExprNode *funcName, vector<ExprNode*> *args):
+    funcName(funcName), args(args) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class IndexExprNode: public ExprNode {
+public:
+  VariableExprNode *name;
+  ExprNode *expr;
+  ExprNode *assign;
+public:
+  IndexExprNode(VariableExprNode *name, ExprNode *expr): 
+    name(name),expr(expr),assign(NULL) {}
+  IndexExprNode(VariableExprNode *name, ExprNode *expr, ExprNode *assign):
+    name(name),expr(expr),assign(assign) {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class CastExprNode: public ExprNode {
+public:
+  VariableExprNode *type;
+  ExprNode *expr;
+public:
+  CastExprNode(VariableExprNode *type, ExprNode *expr):
+    type(type), expr(expr) {}
+  virtual void codeGenerator(GeneratorContext&);  
+};
+
+class IfStatementNode: public StatementNode {
+public:
+  ExprNode *condExpr;
+  BlockExprNode *trueBlock;
+  BlockExprNode *falseBlock;
+public:
+  IfStatementNode(ExprNode *condExpr, BlockExprNode *trueBlock):
+    condExpr(condExpr), trueBlock(trueBlock), falseBlock(new BlockExprNode()) {}
+  IfStatementNode(ExprNode *condExpr, BlockExprNode *trueBlock, BlockExprNode *falseBlock):
+    condExpr(condExpr), trueBlock(trueBlock), falseBlock(falseBlock) {}
   virtual void codeGenerator(GeneratorContext&);
 };
 

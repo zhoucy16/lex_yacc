@@ -11,13 +11,20 @@
 
 %%
 
-"return"            return SYMBOL(RETURN);
+"return"           							return SYMBOL(RETURN);
 
 "int"               						{ yylval.string = new string(yytext, yyleng); return INT; }
 "double"            						{ yylval.string = new string(yytext, yyleng); return DOUBLE; }
 "float"             						{ yylval.string = new string(yytext, yyleng); return FLOAT; }
-"char"													{ yylval.string = new string(yytext, yyleng); return CHAR; }
-"void"													{ yylval.string = new string(yytext, yyleng); return VOID; }
+"char"										{ yylval.string = new string(yytext, yyleng); return CHAR; }
+"void"										{ yylval.string = new string(yytext, yyleng); return VOID; }
+
+"else if"									return SYMBOL(ELIF);
+"if"                            			return SYMBOL(IF);
+"else"                          			return SYMBOL(ELSE);
+"for"                           			return SYMBOL(FOR);
+"while"                         			return SYMBOL(WHILE);
+
 
 ["].*["]												{
 																	yylval.string = new string(yytext, yyleng);
@@ -45,6 +52,16 @@
 
 "="															return SYMBOL(EQUAL);
 
+"=="                            							return SYMBOL(EQ);
+"!="                            							return SYMBOL(NE);
+">"                             							return SYMBOL(GR);
+">="                            							return SYMBOL(GE);
+"<"                            								return SYMBOL(LW);
+"<="                            							return SYMBOL(LE);
+
+
+","															return SYMBOL(COMMA);
+":"															return SYMBOL(COLON);
 ";"															return SYMBOL(SEMICOLON);
 
 [ \t\r]*												;
