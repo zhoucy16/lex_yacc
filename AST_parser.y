@@ -15,6 +15,8 @@
   map<string, E_TYPE> varTable;
 
   void setVarType(VariableExprNode *);
+  void addNewVar(string name, E_TYPE type);
+  E_TYPE checkExprType(ExprNode *left, ExprNode *right);
 %}
 
 %union {
