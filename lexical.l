@@ -2,7 +2,7 @@
   #include <string>
   #include <iostream>
   #include "codeGenerator.h"
-  #include "yacc.tab.h"
+  #include "AST_parser.hpp"
   #define SYMBOL(t)  (yylval.symbol = t)
   extern int lineNum;
 %}

@@ -35,7 +35,6 @@
 
 %token <symbol> LBRACK RBRACK LPAREN RPAREN LBRACE RBRACE
 %token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
-%token <symbol> SEMICOLON
 %token <symbol> RETURN
 %token <symbol> ELIF IF ELSE FOR WHILE
 %token <symbol> COMMA COLON SEMICOLON
@@ -44,9 +43,9 @@
 
 %type <var> variable type
 %type <vars> function_args
-%type <expr> expr logic_expr
+%type <expr> expr logic_expr const
 %type <exprs> invoke_args
-%type <block> global_block local_block
+%type <block> block global_block local_block
 %type <statement> global_statement local_statement
 %type <statement> function_declaration array_declaration
 %type <var_dec> variable_declaration  // source of problems
