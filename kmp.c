@@ -1,64 +1,62 @@
-#include <iostream>
-#include <cstring>
-using namespace std;
+# include <stdio.h>
+# include <stdlib.h>
+
+char* toString(int num){
+    char str[25];
+    itoa(num, str, 10);
+    return str;
+}
 
 int main() {
-    char TIPS[] = "TEXT: %s%cPATTERN: %s%cANSWER: ";
-  	char number[] = "%d ";
-  	char charactor[] = "%c";
-  	char NO_ANSWER[] = "none";
-  	char text[] = "anpanman";
-  	char pattern[] = "an";
-  	int answer[100];
-  	int a = 0;
-  	int m = strlen(text);
-  	int n = strlen(pattern);
-
     int i = 0;
     int j = -1;
-    int next[100];
-    int x;
-    int y;
-    int z;
-    next[0] = -1;
-    while (i < n) {
-        while (j > -1 && pattern[i] != pattern[j]) {
-            j = next[j];
-        }
-        i += 1;
-        j += 1;
-        if ((i != n) && (j != m) && (pattern[i] == pattern[j]))
-            next[i] = next[j];
-        else {
-            if ((i == n) && (j == m))
-                next[i] = next[j];
-            else
-                next[i] = j;
-        }
-    }
+    int kmpNext[100];
+    kmpNext[0] = -1;
+    char text[] = "runningmann";
+    int n = strlen(text);
+    char pattern[] = "nn";
+    int m = strlen(pattern);
+    char noAnswer[] = "False";
+    char comma = ',';
+    int res[100];
+
+    while (i < m) {
+      while (j > -1 && pattern[i] != pattern[j])
+         j = kmpNext[j];
+      i++;
+      j++;
+      if (pattern[i] == pattern[j])
+         kmpNext[i] = kmpNext[j];
+      else
+         kmpNext[i] = j;
+   }
 
     i = 0;
     j = 0;
-    while (j < m) {
-        while (i > -1 && text[j] != pattern[i])
-            i = next[i];
-        i += 1;
-        j += 1;
-        if (i >= n) {
-            answer[a] = j - i;
-            a += 1;
-            i = next[i];
+    int num = 0;
+    while (j < n) {
+        while (i > -1 && pattern[i] != text[j]){
+          i = kmpNext[i];
         }
-   }
-
-   // printf(TIPS, text, 10, pattern, 10);
-   // if (a == 0)
-       // printf(NO_ANSWER);
-   // else {
-       for (i = 0; i < a; i += 1) {
-           cout << answer[i] << endl;
-       }
-   // }
-   // printf(charactor, 10);
+      i++;
+      j++;
+      if (i >= m) {
+        res[num] = j - i;
+        i = kmpNext[i];
+      }
+    }
+    if(num == 0){
+        printf(noAnswer);
+    }
+    else if (num == 1){
+        printf(toString(res[0]);
+    }
+    else {
+        for(i = 0; i < num - 1; i++){
+            printf(toString(res[i]));
+            printf(comma);
+        }
+        printf(toString(res[num - 1]));
+    }
    return 0;
 }
