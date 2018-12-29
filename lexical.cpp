@@ -2063,15 +2063,16 @@ void yyfree (void * ptr )
      COMMA = 288,
      COLON = 289,
      SEMICOLON = 290,
-     EQ = 291,
-     NE = 292,
-     GR = 293,
-     GE = 294,
-     LW = 295,
-     LE = 296,
-     AND = 297,
-     OR = 298,
-     LOWER_THAN_ELSE = 299
+     QUATATION = 291,
+     EQ = 292,
+     NE = 293,
+     GR = 294,
+     GE = 295,
+     LW = 296,
+     LE = 297,
+     AND = 298,
+     OR = 299,
+     LOWER_THAN_ELSE = 300
    };
 #endif
 /* Tokens.  */
@@ -2108,19 +2109,20 @@ void yyfree (void * ptr )
 #define COMMA 288
 #define COLON 289
 #define SEMICOLON 290
-#define EQ 291
-#define NE 292
-#define GR 293
-#define GE 294
-#define LW 295
-#define LE 296
-#define AND 297
-#define OR 298
-#define LOWER_THAN_ELSE 299
+#define QUATATION 291
+#define EQ 292
+#define NE 293
+#define GR 294
+#define GE 295
+#define LW 296
+#define LE 297
+#define AND 298
+#define OR 299
+#define LOWER_THAN_ELSE 300
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 23 "AST_parser.y"
+#line 24 "AST_parser.y"
 {
   int symbol;
   string *string;
@@ -2133,7 +2135,7 @@ typedef union YYSTYPE
   VarDecStatementNode *var_dec;
 }
 /* Line 1529 of yacc.c.  */
-#line 149 "AST_parser.hpp"
+#line 151 "AST_parser.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+using;
+
 int main() {
 
 	char text[] = "ShanghaiZiLaiShuiuhSiaLiZiahgnahS";

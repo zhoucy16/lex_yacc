@@ -17,6 +17,7 @@ enum E_TYPE {
   E_UNKNOWN = -1,
   E_VOID = 0,
   E_CHAR,
+  E_STRING,
   E_DOUBLE,
   E_INT,
   E_PTR,
@@ -94,6 +95,16 @@ public:
 public:
   CharExprNode(char val): val(val) {
     _type = E_CHAR;
+  }
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class StringExprNode: public ExprNode {
+public:
+  string cstr;
+public:
+  StringExprNode(string cstr): cstr(cstr) {
+    _type = E_STRING;
   }
   virtual void codeGenerator(GeneratorContext&);
 };

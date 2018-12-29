@@ -16,6 +16,9 @@ string modify_funcname(string name) {
     else if (name == "printf") {
         return "print";
     } 
+    else if (name == "to_string") {
+        return "str";
+    }
     return name;
 }
 
@@ -148,6 +151,10 @@ void CharExprNode::codeGenerator(GeneratorContext &context) {
     else {
         context.code_buf << "\'" << val << "\'";
     }
+}
+
+void StringExprNode::codeGenerator(GeneratorContext &context) {
+    context.code_buf << "\"" << cstr << "\"";
 }
 
 void IntExprNode::codeGenerator(GeneratorContext &context) {

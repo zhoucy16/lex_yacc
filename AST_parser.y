@@ -8,7 +8,7 @@
 
   BlockExprNode *root;
 
-  void yyerror(char *) {};
+  int yyerror(char *msg);
 
   int yylex(void);
 
@@ -18,6 +18,7 @@
   void setVarType(VariableExprNode *);
   void addNewVar(string name, E_TYPE type);
   E_TYPE checkExprType(ExprNode *left, ExprNode *right);
+  void noSemicolonError();
 %}
 
 %union {
@@ -40,7 +41,7 @@
 %token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
 %token <symbol> RETURN
 %token <symbol> IF ELSE FOR WHILE
-%token <symbol> COMMA COLON SEMICOLON
+%token <symbol> COMMA COLON SEMICOLON QUATATION
 %token <symbol> EQ NE GR GE LW LE AND OR
 
 
@@ -74,6 +75,7 @@ global_block: global_statement              { $$ = new BlockExprNode(); $$->stat
 
 global_statement: function_declaration      { $$ = $1; }
                 | expr SEMICOLON            { $$ = new ExprStatementNode($1); }
+                | expr error                { noSemicolonError(); $$ = new ExprStatementNode($1); }   
                 ;
 
 function_declaration: type variable LPAREN function_args RPAREN block { $$ = new FuncDecStatementNode($1, $2, $4, $6); }; /*为啥这里不记录*/
@@ -85,7 +87,7 @@ type: INT       { $$ = new VariableExprNode(*$1, E_INT); delete $1; }
     ;
 
 variable: VAR     { $$ = new VariableExprNode(*$1); delete $1; }
-        | SUB VAR { std::string tempstr = "-"; $$ = new VariableExprNode(tempstr + *$2); delete $2; std::cout << tempstr + *$2 << endl; }
+        | SUB VAR { std::string tempstr = "-"; $$ = new VariableExprNode(tempstr + *$2); delete $2; }
         ;
 
 function_args:                                          { $$ = new vector<VarDecStatementNode*>(); }                // to edit
@@ -107,6 +109,10 @@ local_statement: variable_declaration SEMICOLON { $$ = $1; }
                | expr SEMICOLON                 { $$ = new ExprStatementNode($1); }
                | RETURN expr SEMICOLON          { $$ = new ReturnStatementNode($2); }
                | SEMICOLON                      { /* NULL */ }
+               | variable_declaration error     { noSemicolonError(); $$ = $1; }
+               | array_declaration error        { noSemicolonError(); $$ = $1; }
+               | expr error                     { noSemicolonError(); $$ = new ExprStatementNode($1); }
+               | RETURN expr error              { noSemicolonError(); $$ = new ReturnStatementNode($2); }
                ;
 
 variable_declaration: type variable             { $2->_type = $1->_type; $$ = new VarDecStatementNode($1, $2); addNewVar($2->name, $2->_type); }
@@ -149,9 +155,9 @@ expr: variable                                  { $<var>$ = $1; }
     | LPAREN type RPAREN expr                   { $$ = new CastExprNode($2, $4); $$->_type = $2->_type; }
     ;
 
-invoke_args: /* NULL */               { $$ = new vector<ExprNode*>(); }
-           | expr                     { $$ = new vector<ExprNode*>(); $$->push_back($1); }
-           | invoke_args COMMA expr   { $1->push_back($3); $$ = $1; }
+invoke_args: /* NULL */                               { $$ = new vector<ExprNode*>(); }
+           | expr                                     { $$ = new vector<ExprNode*>(); $$->push_back($1); }
+           | invoke_args COMMA expr                   { $1->push_back($3); $$ = $1; }
            ;
 
 logic_expr: logic_expr OR logic_expr  { $$ = new OperatorExprNode($1, $2, $3); }
@@ -166,6 +172,7 @@ block: LBRACE local_block RBRACE   { $$ = $2; }
 const: CINT                         { $$ = new IntExprNode(atoi($1->c_str())); delete $1; }
      | CDOUBLE                      { $$ = new DoubleExprNode(atoi($1->c_str())); delete $1; }
      | CCHAR                        { $$ = new CharExprNode($1->front()); delete $1; }
+     | CSTR                         { $$ = new StringExprNode(*$1); delete $1; }
      | SUB CINT                     { $$ = new IntExprNode(-atoi($2->c_str())); delete $2; }
      | SUB CDOUBLE                  { $$ = new IntExprNode(-atoi($2->c_str())); delete $2; }
      ;
@@ -194,7 +201,16 @@ void addNewVar(string name, E_TYPE type) {
 }
 
 E_TYPE checkExprType(ExprNode *left, ExprNode *right) {
-  // to edit
+  if (left ->_type == E_UNKNOWN) {
+    cout << "line" << lineNum << "left has unknown type" << endl;
+    return E_UNKNOWN;
+  }
+  if (right ->_type == E_UNKNOWN) {
+    cout << "line" << lineNum << "right has unknown type" << endl;
+    return E_UNKNOWN;
+  }
+
+
 }
 
 void setVarType(VariableExprNode *var){
@@ -206,4 +222,15 @@ void setVarType(VariableExprNode *var){
   else{
     var->_type = (*it).second;
   }
+}
+
+void noSemicolonError() {
+  cout << "line" << lineNum << ": missed Semicolon." << endl;
+}
+
+
+int yyerror(char *msg)
+{
+	cout << "line" << lineNum << ": 有无法匹配的内容" << endl;
+	return 1;	
 }
