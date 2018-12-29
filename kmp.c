@@ -1,5 +1,11 @@
-#include <iostream>
-#include <cstring>
+# include <stdio.h>
+# include <stdlib.h>
+
+char* toString(int num){
+    char str[25];
+    itoa(num, str, 10);
+    return str;
+}
 
 int main() {
     int i = 0;
@@ -15,11 +21,11 @@ int main() {
     int res[100];
 
     while (i < m) {
-      while (j > -1 && x[i] != x[j])
+      while (j > -1 && pattern[i] != pattern[j])
          j = kmpNext[j];
       i++;
       j++;
-      if (x[i] == x[j])
+      if (pattern[i] == pattern[j])
          kmpNext[i] = kmpNext[j];
       else
          kmpNext[i] = j;
@@ -29,9 +35,9 @@ int main() {
     j = 0;
     int num = 0;
     while (j < n) {
-        while (i > -1 && x[i] != y[j]){
+        while (i > -1 && pattern[i] != text[j]){
           i = kmpNext[i];
-        x}
+        }
       i++;
       j++;
       if (i >= m) {
@@ -43,14 +49,14 @@ int main() {
         printf(noAnswer);
     }
     else if (num == 1){
-        printf(res[0]);
+        printf(toString(res[0]);
     }
     else {
         for(i = 0; i < num - 1; i++){
-            printf(res[i]);
+            printf(toString(res[i]));
             printf(comma);
         }
-        printf(res[num - 1]);
+        printf(toString(res[num - 1]));
     }
    return 0;
 }
