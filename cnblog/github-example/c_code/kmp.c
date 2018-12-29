@@ -29,10 +29,12 @@ int main() {
         j += 1;
         if ((i != n) && (j != m) && (pattern[i] == pattern[j]))
             next[i] = next[j];
-        else if ((i == n) && (j == m))
-            next[i] = next[j];
-        else
-            next[i] = j;
+        else {
+            if ((i == n) && (j == m))
+                next[i] = next[j];
+            else
+                next[i] = j;
+        }
     }
 
     i = 0;

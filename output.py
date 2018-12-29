@@ -1,14 +1,24 @@
 # -*- coding:utf-8
 def main():
-    text = ['S', 'h', 'a', 'n', 'g', 'h', 'a', 'i', 'Z', 'i', 'L', 'a', 'i', 'S', 'h', 'u', 'i', 'u', 'h', 'S', 'i', 'a', 'L', 'i', 'Z', 'i', 'a', 'h', 'g', 'n', 'a', 'h']
-    True = ['T', 'r', 'u', 'e', '!', ' ', '\'', '%', 's', '\'', ' ', 'i', 's', ' ', 'a', ' ', 'p', 'a', 'l', 'i', 'n', 'd', 'r', 'o', 'm', 'e', '.', '%']
-    False = ['F', 'a', 'l', 's', 'e', '!', ' ', '\'', '%', 's', '\'', ' ', 'i', 's', ' ', 'n', 'o', 't', ' ', 'a', ' ', 'p', 'a', 'l', 'i', 'n', 'd', 'r', 'o', 'm', 'e', '.', '%']
+    text = ['S', 'h', 'a', 'n', 'g', 'h', 'a', 'i', 'Z', 'i', 'L', 'a', 'i', 'S', 'h', 'u', 'i', 'u', 'h', 'S', 'i', 'a', 'L', 'i', 'Z', 'i', 'a', 'h', 'g', 'n', 'a', 'h', 'S']
+    #True = ['T', 'r', 'u', 'e']
+    #False = ['F', 'a', 'l', 's', 'e']
     i = None
     l = len(text)
     lh = (l / 2)
     rst = 1
+    i = 0
+    while (i < lh):
+        if ((text[i] != text[((l - 1) - i)])):
+            rst = 0
+            
+
+        i = (i + 1)
+
     if ((rst == 1)):
-        i = 0
+        print("True")
+    else:
+        print("False")
 
     return 0
 

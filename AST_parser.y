@@ -2,6 +2,7 @@
   #include <cstdio>
   #include <cstdlib>
   #include <iostream>
+  #include <string>
   #include <map>
   #include "codeGenerator.h"
 
@@ -38,7 +39,7 @@
 %token <symbol> LBRACK RBRACK LPAREN RPAREN LBRACE RBRACE
 %token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
 %token <symbol> RETURN
-%token <symbol> ELIF IF ELSE FOR WHILE
+%token <symbol> IF ELSE FOR WHILE
 %token <symbol> COMMA COLON SEMICOLON
 %token <symbol> EQ NE GR GE LW LE AND OR
 
@@ -83,7 +84,9 @@ type: INT       { $$ = new VariableExprNode(*$1, E_INT); delete $1; }
     | VOID      { $$ = new VariableExprNode(*$1, E_VOID); delete $1; }
     ;
 
-variable: VAR   { $$ = new VariableExprNode(*$1); delete $1; };
+variable: VAR     { $$ = new VariableExprNode(*$1); delete $1; }
+        | SUB VAR { std::string tempstr = "-"; $$ = new VariableExprNode(tempstr + *$2); delete $2; std::cout << tempstr + *$2 << endl; }
+        ;
 
 function_args:                                          { $$ = new vector<VarDecStatementNode*>(); }                // to edit
              | variable_declaration                     { $$ = new vector<VarDecStatementNode*>(); $$->push_back($1); }
@@ -92,7 +95,8 @@ function_args:                                          { $$ = new vector<VarDec
 
 block: LBRACE local_block RBRACE  { $$ = $2; };
 
-local_block: local_statement              { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
+local_block: /* NULL */                   { $$ = new BlockExprNode(); }
+           | local_statement              { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
            | local_block local_statement  { $$->statements->push_back($<statement>2); }
            ;
 

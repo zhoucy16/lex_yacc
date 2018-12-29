@@ -65,23 +65,22 @@
      SMUL = 281,
      SDIV = 282,
      RETURN = 283,
-     ELIF = 284,
-     IF = 285,
-     ELSE = 286,
-     FOR = 287,
-     WHILE = 288,
-     COMMA = 289,
-     COLON = 290,
-     SEMICOLON = 291,
-     EQ = 292,
-     NE = 293,
-     GR = 294,
-     GE = 295,
-     LW = 296,
-     LE = 297,
-     AND = 298,
-     OR = 299,
-     LOWER_THAN_ELSE = 300
+     IF = 284,
+     ELSE = 285,
+     FOR = 286,
+     WHILE = 287,
+     COMMA = 288,
+     COLON = 289,
+     SEMICOLON = 290,
+     EQ = 291,
+     NE = 292,
+     GR = 293,
+     GE = 294,
+     LW = 295,
+     LE = 296,
+     AND = 297,
+     OR = 298,
+     LOWER_THAN_ELSE = 299
    };
 #endif
 /* Tokens.  */
@@ -111,30 +110,29 @@
 #define SMUL 281
 #define SDIV 282
 #define RETURN 283
-#define ELIF 284
-#define IF 285
-#define ELSE 286
-#define FOR 287
-#define WHILE 288
-#define COMMA 289
-#define COLON 290
-#define SEMICOLON 291
-#define EQ 292
-#define NE 293
-#define GR 294
-#define GE 295
-#define LW 296
-#define LE 297
-#define AND 298
-#define OR 299
-#define LOWER_THAN_ELSE 300
+#define IF 284
+#define ELSE 285
+#define FOR 286
+#define WHILE 287
+#define COMMA 288
+#define COLON 289
+#define SEMICOLON 290
+#define EQ 291
+#define NE 292
+#define GR 293
+#define GE 294
+#define LW 295
+#define LE 296
+#define AND 297
+#define OR 298
+#define LOWER_THAN_ELSE 299
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 22 "AST_parser.y"
+#line 23 "AST_parser.y"
 {
   int symbol;
   string *string;
@@ -147,7 +145,7 @@ typedef union YYSTYPE
   VarDecStatementNode *var_dec;
 }
 /* Line 1529 of yacc.c.  */
-#line 151 "AST_parser.hpp"
+#line 149 "AST_parser.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

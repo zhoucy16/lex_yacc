@@ -201,9 +201,8 @@ public:
       for(int i=0; i<len; i++){
         init->push_back((ExprNode*)(new CharExprNode(str[i])));
       }
-      //init->push_back((ExprNode*))
-      // !!!!!!!!!!!!!!!!!!!!
-      size = init->size();
+      init->push_back((ExprNode*)(new CharExprNode(0)));
+      size = init->size() + 1;
     }
   virtual void codeGenerator(GeneratorContext&);
 };

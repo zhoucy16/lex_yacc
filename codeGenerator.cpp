@@ -12,7 +12,10 @@ string modify_funcname(string name) {
     }
     else if (name == "isdigit") {
         return "str.isdigit";
-    }
+    } 
+    else if (name == "printf") {
+        return "print";
+    } 
     return name;
 }
 
@@ -156,13 +159,20 @@ void DoubleExprNode::codeGenerator(GeneratorContext &context) {
 }
 
 void BlockExprNode::codeGenerator(GeneratorContext &context) {
+    cout << context.code_buf.str() << endl;
+    cout << context.code.str() << endl;
+    if (statements->size() == 0) {
+        context.indent(true);
+        context.code_buf << "pass";
+        context.nextLine(true);
+    }
     for(auto it = statements->begin(); it != statements->end(); it++) {
         context.indent(true);
         (*it)->codeGenerator(context);
         context.nextLine(true);
     }
     if (context.currentBlock()->isFunction) {
-        for(auto it  = context.declared_globals().begin(); it != context.declared_globals().end(); it++) {
+        for(set<string>::iterator it  = context.declared_globals().begin(); it != context.declared_globals().end(); it++) {
             context.indent(false);
             context.declareGlobal(*it);
             context.nextLine(false);
@@ -327,7 +337,7 @@ void FuncDecStatementNode::codeGenerator(GeneratorContext &context) {
         int i = 0;
         (*args)[i]->codeGenerator(context);
         for(i+=1; i < len; i++) {
-            context.code_buf << ",";
+            context.code << ",";
             (*args)[i]->codeGenerator(context);
         }
     }
@@ -339,6 +349,7 @@ void FuncDecStatementNode::codeGenerator(GeneratorContext &context) {
 }
 
 void IfStatementNode::codeGenerator(GeneratorContext &context) {
+    cout << "IfStatement" << endl;
     context.code_buf << "if (";
     condExpr->codeGenerator(context);
     context.code_buf << "):";
@@ -351,12 +362,14 @@ void IfStatementNode::codeGenerator(GeneratorContext &context) {
     }
     context.indent(true);
     context.code_buf << "else:";
+    context.nextLine(true);
     context.pushBlock(true, false);
-    trueBlock->codeGenerator(context);
+    falseBlock->codeGenerator(context);
     context.popBlock();
 }
 
 void ForStatementNode::codeGenerator(GeneratorContext &context) {
+    cout << "ForStatement" << endl;
     initExpr->codeGenerator(context);
     context.nextLine(true);
     context.indent(true);
@@ -371,7 +384,7 @@ void ForStatementNode::codeGenerator(GeneratorContext &context) {
 }
 
 void WhileStatementNode::codeGenerator(GeneratorContext &context) {
-    context.code_buf << "while";
+    context.code_buf << "while ";
     whileExpr->codeGenerator(context);
     context.code_buf << ":";
     context.nextLine(true);
