@@ -3,8 +3,7 @@
 
 int factorial(int n) {
     int rst;
-    char db[] = "%d%c";
-    printf(db, n, 10);
+    printf("%d%c", n, 10);
     if (n == 0)
         rst = 1;
     else
@@ -15,9 +14,8 @@ int factorial(int n) {
 }
 
 int main() {
-    char result[] = "INPUT: %d%cRESULT: %d";
     int input = 4;
     int a = factorial(input);
-    printf(result, input, 10, a);
+    printf("INPUT: %d%cRESULT: %d", input, 10, a);
     return 0;
 }

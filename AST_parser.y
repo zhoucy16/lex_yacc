@@ -95,7 +95,9 @@ function_args:                                          { $$ = new vector<VarDec
              | function_args COMMA variable_declaration { $1->push_back($<var_dec>3); $$ = $1; }
              ; 
 
-block: LBRACE local_block RBRACE  { $$ = $2; };
+block: LBRACE local_block RBRACE  { $$ = $2; }
+     | local_statement            { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
+     ;
 
 local_block: /* NULL */                   { $$ = new BlockExprNode(); }
            | local_statement              { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
@@ -149,7 +151,7 @@ expr: variable                                  { $<var>$ = $1; }
     | variable EQUAL expr                       { $$ = new AssignExprNode($1, $3); setVarType($1); checkExprType($1, $3); $$->_type = $1->_type; }
     | variable LPAREN invoke_args RPAREN        { $$ = new FuncExprNode($1, $3); addNewVar($1->name, E_FUNC); setVarType($1); $$->_type =$1->_type; }
     | variable LBRACK expr RBRACK               { $$ = new IndexExprNode($1, $3); $$->_type = $1->_type; }
-    | variable LBRACK expr RBRACK EQUAL expr    { $$ = new IndexExprNode($1, $3); checkExprType($1, $6); $$->_type = $1->_type; }
+    | variable LBRACK expr RBRACK EQUAL expr    { $$ = new IndexExprNode($1, $3, $6); checkExprType($1, $6); $$->_type = $1->_type; }
     | variable LBRACK expr RBRACK SADD expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
     | variable LBRACK expr RBRACK SSUB expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
     | variable LBRACK expr RBRACK SMUL expr     { $$ = new IndexExprNode($1, $3); $$ = new OperatorExprNode($$, $5, $6); $$ = new IndexExprNode($1, $3, $$); checkExprType($1, $6); $$->_type = $1->_type; }    
@@ -167,10 +169,6 @@ logic_expr: logic_expr OR logic_expr  { $$ = new OperatorExprNode($1, $2, $3); }
           | logic_expr AND logic_expr { $$ = new OperatorExprNode($1, $2, $3); }
           | expr                      { $$ = $1;}
           ;
-
-block: LBRACE local_block RBRACE   { $$ = $2; }
-     | local_statement             { $$ = new BlockExprNode(); $$->statements->push_back($<statement>1); }
-     ;
 
 const: CINT                         { $$ = new IntExprNode(atoi($1->c_str())); delete $1; }
      | CDOUBLE                      { $$ = new DoubleExprNode(atoi($1->c_str())); delete $1; }

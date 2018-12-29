@@ -1,14 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-char* toString(int num){
-    char str[25];
-    itoa(num, str, 10);
-    return str;
-}
-
 int main() {
-	char errorInput[] = "invalid expression";
 	char expr[] = "16/4+((8-5)*(4+3)+1)-10/2*9#";
 
 	char post[1000];
@@ -115,8 +108,8 @@ int main() {
 	}
 	
 	if(error == 0)
-		printf(toString(newstack[top]));
+		printf("%d", newstack[top]);
 	else
-		printf(errorInput);
+		printf("invalid expression");
 	return 0;
 }
