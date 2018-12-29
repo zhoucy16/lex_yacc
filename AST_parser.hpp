@@ -65,23 +65,25 @@
      SMUL = 281,
      SDIV = 282,
      RETURN = 283,
-     IF = 284,
-     ELSE = 285,
-     FOR = 286,
-     WHILE = 287,
-     COMMA = 288,
-     COLON = 289,
-     SEMICOLON = 290,
-     QUATATION = 291,
-     EQ = 292,
-     NE = 293,
-     GR = 294,
-     GE = 295,
-     LW = 296,
-     LE = 297,
-     AND = 298,
-     OR = 299,
-     LOWER_THAN_ELSE = 300
+     BREAK = 284,
+     CONTINUE = 285,
+     IF = 286,
+     ELSE = 287,
+     FOR = 288,
+     WHILE = 289,
+     COMMA = 290,
+     COLON = 291,
+     SEMICOLON = 292,
+     QUATATION = 293,
+     EQ = 294,
+     NE = 295,
+     GR = 296,
+     GE = 297,
+     LW = 298,
+     LE = 299,
+     AND = 300,
+     OR = 301,
+     LOWER_THAN_ELSE = 302
    };
 #endif
 /* Tokens.  */
@@ -111,23 +113,25 @@
 #define SMUL 281
 #define SDIV 282
 #define RETURN 283
-#define IF 284
-#define ELSE 285
-#define FOR 286
-#define WHILE 287
-#define COMMA 288
-#define COLON 289
-#define SEMICOLON 290
-#define QUATATION 291
-#define EQ 292
-#define NE 293
-#define GR 294
-#define GE 295
-#define LW 296
-#define LE 297
-#define AND 298
-#define OR 299
-#define LOWER_THAN_ELSE 300
+#define BREAK 284
+#define CONTINUE 285
+#define IF 286
+#define ELSE 287
+#define FOR 288
+#define WHILE 289
+#define COMMA 290
+#define COLON 291
+#define SEMICOLON 292
+#define QUATATION 293
+#define EQ 294
+#define NE 295
+#define GR 296
+#define GE 297
+#define LW 298
+#define LE 299
+#define AND 300
+#define OR 301
+#define LOWER_THAN_ELSE 302
 
 
 
@@ -147,7 +151,7 @@ typedef union YYSTYPE
   VarDecStatementNode *var_dec;
 }
 /* Line 1529 of yacc.c.  */
-#line 151 "AST_parser.hpp"
+#line 155 "AST_parser.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

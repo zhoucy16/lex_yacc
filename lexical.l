@@ -12,6 +12,8 @@
 %%
 
 "return"           							return SYMBOL(RETURN);
+"break"													return SYMBOL(BREAK);
+"continue"											return SYMBOL(CONTINUE);
 
 "int"               						{ yylval.string = new string(yytext, yyleng); return INT; }
 "double"            						{ yylval.string = new string(yytext, yyleng); return DOUBLE; }

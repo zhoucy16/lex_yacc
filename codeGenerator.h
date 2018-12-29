@@ -187,9 +187,27 @@ public:
 class ReturnStatementNode: public StatementNode {
 public:
   ExprNode *expr;
+  bool hasExpr;
 
 public:
-  ReturnStatementNode(ExprNode *expr): expr(expr) {}
+  ReturnStatementNode(ExprNode *expr): expr(expr) {
+    hasExpr = true;
+  }
+  ReturnStatementNode() {
+    hasExpr = false;
+  }
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class BreakStatementNode: public StatementNode {
+public:
+  BreakStatementNode() {}
+  virtual void codeGenerator(GeneratorContext&);
+};
+
+class ContinueStatementNode: public StatementNode {
+public:
+  ContinueStatementNode() {}
   virtual void codeGenerator(GeneratorContext&);
 };
 

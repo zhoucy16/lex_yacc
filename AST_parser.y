@@ -39,7 +39,7 @@
 
 %token <symbol> LBRACK RBRACK LPAREN RPAREN LBRACE RBRACE
 %token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
-%token <symbol> RETURN
+%token <symbol> RETURN BREAK CONTINUE
 %token <symbol> IF ELSE FOR WHILE
 %token <symbol> COMMA COLON SEMICOLON QUATATION
 %token <symbol> EQ NE GR GE LW LE AND OR
@@ -108,6 +108,9 @@ local_statement: variable_declaration SEMICOLON { $$ = $1; }
                | loop                           { $$ = $1; }
                | expr SEMICOLON                 { $$ = new ExprStatementNode($1); }
                | RETURN expr SEMICOLON          { $$ = new ReturnStatementNode($2); }
+               | RETURN SEMICOLON               { $$ = new ReturnStatementNode(); }
+               | BREAK SEMICOLON                { $$ = new BreakStatementNode(); }
+               | CONTINUE SEMICOLON             { $$ = new ContinueStatementNode(); }
                | SEMICOLON                      { /* NULL */ }
                | variable_declaration error     { noSemicolonError(); $$ = $1; }
                | array_declaration error        { noSemicolonError(); $$ = $1; }

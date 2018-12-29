@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-using;
 
 int main() {
 
@@ -9,6 +8,8 @@ int main() {
 	char True[] = "True";
 	char False[] = "False";
 
+	int a = 1;
+	break;
 	int i;
 	int l = strlen(text);
 	int lh = l / 2;
@@ -21,9 +22,9 @@ int main() {
 	}
 
 	if (rst == 1) {
-		printf(True);
+		printf("True %d", 1);
 	} else {
-		printf(False);
+		printf("False");
 	}
 	return 0;
 }

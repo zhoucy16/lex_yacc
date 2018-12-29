@@ -13,12 +13,6 @@ string modify_funcname(string name) {
     else if (name == "isdigit") {
         return "str.isdigit";
     } 
-    else if (name == "printf") {
-        return "print";
-    } 
-    else if (name == "to_string") {
-        return "str";
-    }
     return name;
 }
 
@@ -38,6 +32,18 @@ GeneratorContext::~GeneratorContext() {
 
 void GeneratorContext::codeGenerator(BlockExprNode &root) {
     code << "# -*- coding:utf-8" << endl;
+    code << "# Project: Compiler final project" << endl;
+    code << "def printf(format, *args):" << endl;
+    code << "   if len(args):" << endl;
+    code << "       new_args = []" << endl;
+    code << "       for arg in enumerate(args):" << endl;
+    code << "           if type(arg) == list and len(arg) > 0 and type(arg[0]) == str:" << endl;
+    code << "               new_args.append(''.join(arg))" << endl;
+    code << "           else:" << endl;
+    code << "               new_args.append(arg)" << endl;
+    code << "       print format % tuple(new_args)" << endl;
+    code << "   else:" << endl;
+    code << "       print format" << endl;
     root.codeGenerator(*this);
     code << "\nif __name__ == \"__main__\":\n    main()\n";
 }
@@ -330,7 +336,17 @@ void ArrayDecStatementNode::codeGenerator(GeneratorContext &context) {
 
 void ReturnStatementNode::codeGenerator(GeneratorContext &context) {
     context.code_buf << "return ";
-    expr->codeGenerator(context);
+    if (hasExpr) {
+        expr->codeGenerator(context);
+    }
+}
+
+void BreakStatementNode::codeGenerator(GeneratorContext &context) {
+    context.code_buf << "break";
+}
+
+void ContinueStatementNode::codeGenerator(GeneratorContext &context) {
+    context.code_buf << "continue";
 }
 
 void FuncDecStatementNode::codeGenerator(GeneratorContext &context) {
