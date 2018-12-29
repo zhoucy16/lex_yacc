@@ -35,9 +35,9 @@ void GeneratorContext::codeGenerator(BlockExprNode &root) {
     code << "# Project: Compiler final project" << endl;
     code << "def printf(format, *args):" << endl;
     code << "    if len(args):" << endl;
-    code << "        print format % tuple(args)" << endl;
+    code << "        print (\"\b\"+format) % tuple(args)," << endl;
     code << "    else:" << endl;
-    code << "        print format" << endl;
+    code << "        print (\"\b\"+format)," << endl;
     code << endl;
     code << "def atoi(clist):" << endl;
     code << "    newlist = []" << endl;
@@ -318,7 +318,11 @@ void ArrayDecStatementNode::codeGenerator(GeneratorContext &context) {
     }
     name->codeGenerator(context);
     if (init->size() == 0) {
-        context.code_buf << " = [None]*" << size;
+        if (type->_type == E_INT) {
+            context.code_buf << " = [0]*" << size;
+        } else {
+            context.code_buf << " = [None]*" << size;
+        }
     }
     else {
         context.code_buf << " = [";

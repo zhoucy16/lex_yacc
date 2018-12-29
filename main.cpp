@@ -29,7 +29,8 @@ int main(int argc, char **argv) {
     context.codeGenerator(*root);
     cout << "----------------------" << endl;
     cout << "Finished" << endl;
-    string outputFilename = "output.py";
+    string inputFileName = filename;
+    string outputFilename = inputFileName + ".py";
     ofstream outfile;
     outfile.open(outputFilename, ios::out);
     context.outputCode(outfile);
