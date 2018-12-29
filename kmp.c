@@ -1,12 +1,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-char* toString(int num){
-    char str[25];
-    itoa(num, str, 10);
-    return str;
-}
-
 int main() {
     int i = 0;
     int j = -1;
@@ -43,20 +37,21 @@ int main() {
       if (i >= m) {
         res[num] = j - i;
         i = kmpNext[i];
+        num += 1;
       }
     }
     if(num == 0){
         printf(noAnswer);
     }
     else if (num == 1){
-        printf(toString(res[0]);
+        printf("%d", res[0]);
     }
     else {
         for(i = 0; i < num - 1; i++){
-            printf(toString(res[i]));
+            printf("%d", res[i]);
             printf(comma);
         }
-        printf(toString(res[num - 1]));
+        printf("%d", res[num - 1]);
     }
    return 0;
 }

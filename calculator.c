@@ -115,7 +115,7 @@ int main() {
 	}
 	
 	if(error == 0)
-		printf(toString(newstack[top]));
+		printf("%d", newstack[top]);
 	else
 		printf(errorInput);
 	return 0;
