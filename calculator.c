@@ -2,8 +2,7 @@
 #include <string.h>
 
 int main() {
-	char TIPS_T[] = "EXPR: %s%cRESULT: %d%c";
-	char TIPS_F[] = "EXPR: %s%cRESULT: error%c";
+	char errorInput[] = "invalid expression";
 	char expr[] = "16/4+((8-5)*(4+3)+1)-10/2*9#";
 
 	char post[1000];
@@ -110,8 +109,8 @@ int main() {
 	}
 	
 	if(error == 0)
-		printf(TIPS_T, expr, 10, newstack[top], 10);
+		printf(newstack[top]);
 	else
-		printf(TIPS_F, expr, 10, 10);
+		printf(errorInput);
 	return 0;
 }
