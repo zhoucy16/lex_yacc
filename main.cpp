@@ -18,17 +18,17 @@ int main(int argc, char **argv) {
         return 0;
     yyin = fopen(filename,"r");
     if(!yyin){
-        cout<<"File opening failed\n"<<endl;        
+        cout<<"Open file failed\n"<<endl;        
     }
     if(yyparse()){
-        cout<<"error"<<endl;
+        cout<<"Error"<<endl;
     }
     GeneratorContext context;
-    cout << "Generating Python code" << endl;
+    cout << "Compiling  to Python" << endl;
     cout << "----------------------" << endl;
     context.codeGenerator(*root);
     cout << "----------------------" << endl;
-    cout << "Finished" << endl;
+    cout << "Finish compile" << endl;
     string inputFileName = filename;
     string outputFilename = inputFileName + ".py";
     ofstream outfile;

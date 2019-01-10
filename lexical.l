@@ -12,14 +12,14 @@
 %%
 
 "return"           							return SYMBOL(RETURN);
-"break"													return SYMBOL(BREAK);
-"continue"											return SYMBOL(CONTINUE);
+"break"										return SYMBOL(BREAK);
+"continue"									return SYMBOL(CONTINUE);
 
-"int"               						{ yylval.string = new string(yytext, yyleng); return INT; }
-"double"            						{ yylval.string = new string(yytext, yyleng); return DOUBLE; }
-"float"             						{ yylval.string = new string(yytext, yyleng); return FLOAT; }
-"char"										{ yylval.string = new string(yytext, yyleng); return CHAR; }
-"void"										{ yylval.string = new string(yytext, yyleng); return VOID; }
+"int"               						{ yylval.str = new string(yytext, yyleng); return INT; }
+"double"            						{ yylval.str = new string(yytext, yyleng); return DOUBLE; }
+"float"             						{ yylval.str = new string(yytext, yyleng); return FLOAT; }
+"char"										{ yylval.str = new string(yytext, yyleng); return CHAR; }
+"void"										{ yylval.str = new string(yytext, yyleng); return VOID; }
 
 "if"                            			return SYMBOL(IF);
 "else"                          			return SYMBOL(ELSE);
@@ -27,20 +27,20 @@
 "while"                         			return SYMBOL(WHILE);
 
 
-["].*["]												{
-																	yylval.string = new string(yytext, yyleng);
-																	yylval.string->erase(yylval.string->begin());
-																	yylval.string->erase(yylval.string->end() - 1);
-																	return CSTR;
-																}
-[_A-Za-z][_0-9A-Za-z]*					{ yylval.string = new string(yytext, yyleng); return VAR; }
-[0-9]+\.[0-9]*									{ yylval.string = new string(yytext, yyleng); return CDOUBLE; }
-[0-9]*\.[0-9]+									{ yylval.string = new string(yytext, yyleng); return CDOUBLE; }
-[0-9]+													{ yylval.string = new string(yytext, yyleng); return CINT; }
+["].*["]									{
+												yylval.str = new string(yytext, yyleng);
+												yylval.str->erase(yylval.str->begin());
+												yylval.str->erase(yylval.str->end() - 1);
+												return CSTR;
+											}
+[_A-Za-z][_0-9A-Za-z]*						{ yylval.str = new string(yytext, yyleng); return VAR; }
+[0-9]+\.[0-9]*								{ yylval.str = new string(yytext, yyleng); return CDOUBLE; }
+[0-9]*\.[0-9]+								{ yylval.str = new string(yytext, yyleng); return CDOUBLE; }
+[0-9]+													{ yylval.str = new string(yytext, yyleng); return CINT; }
 ['].[']													{
-																	yylval.string = new string(yytext, yyleng);
-																	yylval.string->erase(yylval.string->begin());
-																	yylval.string->erase(yylval.string->end() - 1);
+																	yylval.str = new string(yytext, yyleng);
+																	yylval.str->erase(yylval.str->begin());
+																	yylval.str->erase(yylval.str->end() - 1);
 																	return CCHAR;
 																}
 

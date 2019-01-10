@@ -23,7 +23,7 @@
 
 %union {
   int symbol;
-  string *string;
+  string *str;
   VariableExprNode *var;
   ExprNode *expr;
   vector<VarDecStatementNode*> *vars;
@@ -33,9 +33,9 @@
   VarDecStatementNode *var_dec;
 }
 
-%token <string> INT DOUBLE FLOAT CHAR VOID
-%token <string> CSTR CINT CDOUBLE CCHAR
-%token <string> VAR
+%token <str> INT DOUBLE FLOAT CHAR VOID
+%token <str> CSTR CINT CDOUBLE CCHAR
+%token <str> VAR
 
 %token <symbol> LBRACK RBRACK LPAREN RPAREN LBRACE RBRACE
 %token <symbol> EQUAL ADD SUB MUL DIV SADD SSUB SMUL SDIV
