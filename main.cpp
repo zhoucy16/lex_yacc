@@ -30,6 +30,8 @@ int main(int argc, char **argv) {
     cout << "----------------------" << endl;
     cout << "Finish compile" << endl;
     string inputFileName = filename;
+    inputFileName.pop_back();
+    inputFileName.pop_back();
     string outputFilename = inputFileName + ".py";
     ofstream outfile;
     outfile.open(outputFilename, ios::out);

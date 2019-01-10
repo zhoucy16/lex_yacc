@@ -36,32 +36,32 @@
 [_A-Za-z][_0-9A-Za-z]*						{ yylval.str = new string(yytext, yyleng); return VAR; }
 [0-9]+\.[0-9]*								{ yylval.str = new string(yytext, yyleng); return CDOUBLE; }
 [0-9]*\.[0-9]+								{ yylval.str = new string(yytext, yyleng); return CDOUBLE; }
-[0-9]+													{ yylval.str = new string(yytext, yyleng); return CINT; }
-['].[']													{
-																	yylval.str = new string(yytext, yyleng);
-																	yylval.str->erase(yylval.str->begin());
-																	yylval.str->erase(yylval.str->end() - 1);
-																	return CCHAR;
-																}
+[0-9]+										{ yylval.str = new string(yytext, yyleng); return CINT; }
+['].[']										{
+												yylval.str = new string(yytext, yyleng);
+												yylval.str->erase(yylval.str->begin());
+												yylval.str->erase(yylval.str->end() - 1);
+												return CCHAR;
+											}
 
-"["															return SYMBOL(LBRACK);
-"]"															return SYMBOL(RBRACK);
-"("															return SYMBOL(LPAREN);
-")"															return SYMBOL(RPAREN);
-"{"															return SYMBOL(LBRACE);
-"}"															return SYMBOL(RBRACE);
+"["											return SYMBOL(LBRACK);
+"]"											return SYMBOL(RBRACK);
+"("											return SYMBOL(LPAREN);
+")"											return SYMBOL(RPAREN);
+"{"											return SYMBOL(LBRACE);
+"}"											return SYMBOL(RBRACE);
 
-"="															return SYMBOL(EQUAL);
+"="											return SYMBOL(EQUAL);
 
-"=="                            							return SYMBOL(EQ);
-"!="                            							return SYMBOL(NE);
-">"                             							return SYMBOL(GR);
-">="                            							return SYMBOL(GE);
-"<"                            								return SYMBOL(LW);
-"<="                            							return SYMBOL(LE);
+"=="                            			return SYMBOL(EQ);
+"!="                            			return SYMBOL(NE);
+">"                             			return SYMBOL(GR);
+">="                            			return SYMBOL(GE);
+"<"                            				return SYMBOL(LW);
+"<="                            			return SYMBOL(LE);
 
-"&&"                            return SYMBOL(AND);
-"||"                            return SYMBOL(OR);
+"&&"                            			return SYMBOL(AND);
+"||"                            			return SYMBOL(OR);
 
 
 "+"                             return SYMBOL(ADD);

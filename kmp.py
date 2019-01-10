@@ -2,9 +2,22 @@
 # Project: Compiler final project
 def printf(format, *args):
     if len(args):
-        print (""+format) % tuple(args),
+        print ((""+format) % tuple(args)),
     else:
         print (""+format),
+
+def scanf(format, arg):
+    temp_str = input()
+    for i in range(len(temp_str)):
+        arg[i] = temp_str[i]
+
+def strlen(char_list):
+    result = 0
+    for i in range(len(char_list)):
+        if not char_list[i]:
+            break;
+        result += 1
+    return result
 
 def atoi(clist):
     newlist = []
@@ -19,10 +32,14 @@ def main():
     j = -1
     kmpNext = [0]*100
     kmpNext[0] = -1
-    text = ['r', 'u', 'n', 'n', 'i', 'n', 'g', 'm', 'a', 'n', 'n']
-    n = len(text)
-    pattern = ['n', 'n']
-    m = len(pattern)
+    text = [None]*100
+    printf("请输入一个字符串:")
+    scanf("%s",text)
+    n = strlen(text)
+    pattern = [None]*100
+    printf("请输入一个模式串:")
+    scanf("%s",pattern)
+    m = strlen(pattern)
     res = [0]*100
     while (i < m):
         while ((j > -1) and (pattern[i] != pattern[j])):

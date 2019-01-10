@@ -28,7 +28,7 @@ class BaseGeneratorBlock {
 public:
   BaseGeneratorBlock();
   set<string> locals;
-  set<string> declared_globals;
+  set<string> declaredGlobals;
   bool isFunction;
 };
 
@@ -38,8 +38,8 @@ class GeneratorContext {
 public:
   stack<BaseGeneratorBlock *> blocks;
   set<string> globalVariables;
-  stringstream code;
-  stringstream code_buf;
+  stringstream codeOutput;
+  stringstream codeBuffer;
   int indent_num;
   bool funcDeclaring;
 
@@ -51,7 +51,7 @@ public:
   void clearBuf();
   void applyBuf();
   set<string>& locals();
-  set<string>& declared_globals();
+  set<string>& declaredGlobals();
   set<string>& globals();
   void declareGlobal(string name);
   BaseGeneratorBlock *currentBlock();
@@ -170,7 +170,7 @@ public:
   virtual void codeGenerator(GeneratorContext&);
 };
 
-class FuncDecStatementNode: public StatementNode {
+class FuncStatementNode: public StatementNode {
 public:
   VariableExprNode *type;
   VariableExprNode *name;
@@ -178,7 +178,7 @@ public:
   BlockExprNode *block;
 
 public:
-  FuncDecStatementNode(VariableExprNode *type, VariableExprNode *name, 
+  FuncStatementNode(VariableExprNode *type, VariableExprNode *name, 
     vector<VarDecStatementNode*> *args, BlockExprNode *block): 
     type(type), name(name), args(args), block(block) {}
   virtual void codeGenerator(GeneratorContext&);

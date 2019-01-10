@@ -2,9 +2,22 @@
 # Project: Compiler final project
 def printf(format, *args):
     if len(args):
-        print (""+format) % tuple(args),
+        print ((""+format) % tuple(args)),
     else:
         print (""+format),
+
+def scanf(format, arg):
+    temp_str = input()
+    for i in range(len(temp_str)):
+        arg[i] = temp_str[i]
+
+def strlen(char_list):
+    result = 0
+    for i in range(len(char_list)):
+        if not char_list[i]:
+            break;
+        result += 1
+    return result
 
 def atoi(clist):
     newlist = []
@@ -15,7 +28,9 @@ def atoi(clist):
     return float(''.join(newlist))
 
 def main():
-    expr = ['1', '6', '/', '4', '+', '(', '(', '8', '-', '5', ')', '*', '(', '4', '+', '3', ')', '+', '1', ')', '-', '1', '0', '/', '2', '*', '9', '#']
+    printf("请输入要计算的四则表达式，请以#作为结尾:")
+    expr = [None]*100
+    scanf("%s",expr)
     post = [None]*1000
     ss = [None]*1000
     ch = None
@@ -25,7 +40,7 @@ def main():
     z = None
     error = 0
     top = 0
-    sum = len(expr)
+    sum = strlen(expr)
     t = 1
     i = 0
     ch = expr[i]

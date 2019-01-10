@@ -7,9 +7,13 @@ int main() {
     int j = -1;
     int kmpNext[100];
     kmpNext[0] = -1;
-    char text[] = "runningmann";
+    char text[100];
+    printf( "请输入一个字符串:");
+    scanf("%s", text);
     int n = strlen(text);
-    char pattern[] = "nn";
+    char pattern[100];
+    printf( "请输入一个模式串:");
+    scanf("%s", pattern);
     int m = strlen(pattern);
     int res[100];
     

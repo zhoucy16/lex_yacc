@@ -2,8 +2,10 @@
 #include <string.h>
 
 int main() {
-	char expr[] = "16/4+((8-5)*(4+3)+1)-10/2*9#";
-
+	printf( "请输入要计算的四则表达式，请以#作为结尾:");
+	char expr[100];
+    scanf("%s", expr);
+	
 	char post[1000];
 	char ss[1000];
 	char ch;
